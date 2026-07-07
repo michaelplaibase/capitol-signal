@@ -81,6 +81,14 @@ normalizes it to the same shape as the Python pipeline (buy/sell sides, party,
 chamber, Danish amount and date formatting). Newest first, with search and
 buy/sell filters. Signal only, no execution.
 
+Interactions: search or tap a politician's name to filter the feed; tap "kurs?"
+on a trade to load the market close on the trade date plus the current price
+(api/price.js, Yahoo Finance); and a Simulator (api/simulate.js) that values a
+politician's disclosed buys since a chosen date, using their full Kadoa filer
+history and Yahoo closing prices. All price and simulator figures are estimates
+(midpoint of the amount range, close on the trade date, buy-and-hold), not the
+disclosed execution price, which is not published.
+
 The Python pipeline and the vendored capitol-api service are excluded from the
 deployment via .vercelignore. Deploy config is in vercel.json (framework null,
 static output in public/, serverless functions in api/).
