@@ -1,0 +1,13 @@
+# Vercel only needs the web app (api/, public/, vercel.json, package.json).
+# The Python pipeline and vendored service are not part of the deployment.
+core/
+ingest/
+notify/
+tests/
+vendor/
+__pycache__/
+.pytest_cache/
+*.py
+signal.db
+signal.db-journal
+VERIFICATION.md

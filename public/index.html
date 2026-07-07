@@ -1,0 +1,240 @@
+<!doctype html>
+<html lang="da">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>Capitol Signal</title>
+<meta name="description" content="Amerikanske politikeres indberettede aktiehandler. Kun signal, ikke realtid." />
+<style>
+  :root {
+    --bg: #0a0e14;
+    --bg-soft: #10151f;
+    --card: #131a26;
+    --line: #1f2836;
+    --text: #e6edf3;
+    --muted: #8a97a8;
+    --faint: #5b6675;
+    --buy: #3fb950;
+    --sell: #f85149;
+    --exch: #d29922;
+    --accent: #4c8dff;
+    --mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+    --sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: var(--sans);
+    -webkit-font-smoothing: antialiased;
+    line-height: 1.4;
+    padding-bottom: env(safe-area-inset-bottom);
+  }
+  .wrap { max-width: 640px; margin: 0 auto; }
+  header {
+    position: sticky; top: 0; z-index: 10;
+    background: linear-gradient(180deg, var(--bg) 70%, rgba(10,14,20,0.85));
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--line);
+    padding: 14px 16px 10px;
+  }
+  .brand { display: flex; align-items: baseline; gap: 8px; }
+  .brand h1 {
+    font-size: 17px; letter-spacing: 0.02em; margin: 0; font-weight: 650;
+  }
+  .brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--buy);
+    box-shadow: 0 0 10px var(--buy); align-self: center; }
+  .sub { color: var(--muted); font-size: 12.5px; margin: 2px 0 0; }
+  .meta { color: var(--faint); font-size: 11.5px; font-family: var(--mono); margin-top: 6px; }
+  .controls { margin-top: 11px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .search {
+    flex: 1 1 100%;
+    background: var(--bg-soft); border: 1px solid var(--line); color: var(--text);
+    border-radius: 10px; padding: 9px 12px; font-size: 14px; font-family: var(--sans);
+  }
+  .search::placeholder { color: var(--faint); }
+  .search:focus { outline: none; border-color: var(--accent); }
+  .segs { display: flex; gap: 6px; }
+  .seg {
+    background: var(--bg-soft); border: 1px solid var(--line); color: var(--muted);
+    border-radius: 999px; padding: 6px 12px; font-size: 12.5px; cursor: pointer;
+    font-family: var(--sans);
+  }
+  .seg[aria-pressed="true"] { color: var(--text); border-color: var(--accent); background: #16233b; }
+  main { padding: 8px 12px 40px; }
+  .feed { display: flex; flex-direction: column; gap: 8px; }
+  .card {
+    background: var(--card); border: 1px solid var(--line); border-radius: 13px;
+    padding: 12px 13px; border-left: 3px solid var(--line);
+  }
+  .card.buy { border-left-color: var(--buy); }
+  .card.sell { border-left-color: var(--sell); }
+  .card.exchange { border-left-color: var(--exch); }
+  .row1 { display: flex; align-items: center; gap: 8px; }
+  .badge { font-size: 11px; font-weight: 700; letter-spacing: 0.04em; padding: 3px 7px;
+    border-radius: 6px; white-space: nowrap; }
+  .badge.buy { color: var(--buy); background: rgba(63,185,80,0.12); }
+  .badge.sell { color: var(--sell); background: rgba(248,81,73,0.12); }
+  .badge.exchange { color: var(--exch); background: rgba(210,153,34,0.12); }
+  .badge.other { color: var(--muted); background: rgba(138,151,168,0.12); }
+  .ticker { font-family: var(--mono); font-size: 16px; font-weight: 650; letter-spacing: 0.02em; }
+  .ticker.none { color: var(--faint); font-weight: 500; font-size: 13px; }
+  .amount { margin-left: auto; font-family: var(--mono); font-size: 13.5px; color: var(--text); white-space: nowrap; }
+  .row2 { display: flex; align-items: center; gap: 8px; margin-top: 8px; flex-wrap: wrap; }
+  .who { font-size: 14px; font-weight: 560; }
+  .chip { font-size: 11px; font-family: var(--mono); color: var(--muted);
+    border: 1px solid var(--line); border-radius: 6px; padding: 1px 6px; }
+  .chip.D { color: #6ea8ff; border-color: #24406e; }
+  .chip.R { color: #ff8a8a; border-color: #6e2a2a; }
+  .row3 { display: flex; align-items: center; gap: 10px; margin-top: 8px;
+    font-size: 11.5px; color: var(--faint); font-family: var(--mono); flex-wrap: wrap; }
+  .row3 a { color: var(--accent); text-decoration: none; margin-left: auto; }
+  .row3 a:hover { text-decoration: underline; }
+  .state { color: var(--muted); text-transform: none; }
+  .status { text-align: center; color: var(--muted); padding: 40px 16px; font-size: 14px; }
+  .status .spin { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--line);
+    border-top-color: var(--accent); border-radius: 50%; animation: sp 0.8s linear infinite; }
+  @keyframes sp { to { transform: rotate(360deg); } }
+  footer { color: var(--faint); font-size: 11px; text-align: center; padding: 8px 20px 28px; line-height: 1.6; }
+  footer strong { color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <div class="brand"><span class="dot"></span><h1>Capitol Signal</h1></div>
+    <p class="sub">Amerikanske politikeres indberettede aktiehandler</p>
+    <p class="meta" id="meta">indlaeser...</p>
+    <div class="controls">
+      <input class="search" id="q" type="search" inputmode="search"
+             placeholder="Soeg paa navn eller ticker (fx Pelosi, NVDA)" />
+      <div class="segs" role="group" aria-label="Filtrer paa type">
+        <button class="seg" data-side="all" aria-pressed="true">Alle</button>
+        <button class="seg" data-side="buy" aria-pressed="false">Koeb</button>
+        <button class="seg" data-side="sell" aria-pressed="false">Salg</button>
+      </div>
+    </div>
+  </header>
+  <main>
+    <div class="feed" id="feed"></div>
+    <div class="status" id="status"><span class="spin"></span></div>
+  </main>
+  <footer>
+    <strong>Kun signal.</strong> Viser indberettede handler, ikke realtid. Under STOCK Act kan
+    politikere indberette uger efter handlen. Ingen ordre placeres nogensinde.<br />
+    Kilde: Kadoa (offentlige indberettelser), Repraesentanternes Hus + Senat + OGE.
+  </footer>
+</div>
+<script>
+  var SIDE = {
+    buy: { cls: "buy", emoji: "🟢", label: "KOEB" },
+    sell: { cls: "sell", emoji: "🔴", label: "SALG" },
+    exchange: { cls: "exchange", emoji: "🔁", label: "BYT" },
+    other: { cls: "other", emoji: "⚪", label: "ANDET" }
+  };
+  var CHAMBER = { house: "Hus", senate: "Senat", oge: "OGE" };
+
+  function lastName(full) {
+    if (!full) return "";
+    var parts = String(full).trim().split(/\s+/);
+    return parts[parts.length - 1].replace(/[.,]+$/, "");
+  }
+  function dkAmount(min, max) {
+    if (min == null && max == null) return "ukendt beloeb";
+    function g(n) { return String(n).replace(/\B(?=(\d{3})+(?!\d))/g, "."); }
+    if (min != null && max != null) return g(min) + "-" + g(max) + " USD";
+    return g(min != null ? min : max) + " USD";
+  }
+  function dkDate(iso) {
+    if (!iso) return "?";
+    var p = iso.split("-");
+    return p.length === 3 ? p[2] + "-" + p[1] + "-" + p[0] : iso;
+  }
+  function esc(s) {
+    return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
+      return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
+    });
+  }
+
+  var ALL = [];
+  var state = { side: "all", q: "" };
+
+  function render() {
+    var feed = document.getElementById("feed");
+    var q = state.q.trim().toLowerCase();
+    var rows = ALL.filter(function (t) {
+      if (state.side !== "all" && t.side !== state.side) return false;
+      if (!q) return true;
+      return (
+        (t.politician || "").toLowerCase().indexOf(q) >= 0 ||
+        (t.ticker || "").toLowerCase().indexOf(q) >= 0 ||
+        (t.asset_name || "").toLowerCase().indexOf(q) >= 0
+      );
+    });
+    document.getElementById("status").textContent = rows.length
+      ? ""
+      : "Ingen handler matcher.";
+    feed.innerHTML = rows
+      .slice(0, 300)
+      .map(function (t) {
+        var s = SIDE[t.side] || SIDE.other;
+        var tk = t.ticker
+          ? '<span class="ticker">' + esc(t.ticker) + "</span>"
+          : '<span class="ticker none">' + esc(t.asset_name || "uden ticker") + "</span>";
+        var party = t.party ? '<span class="chip ' + esc(t.party) + '">' + esc(t.party) +
+          (t.state ? "-" + esc(t.state) : "") + "</span>" : "";
+        var link = t.doc_url
+          ? '<a href="' + esc(t.doc_url) + '" target="_blank" rel="noopener">indberetning ↗</a>'
+          : "";
+        return (
+          '<article class="card ' + s.cls + '">' +
+          '<div class="row1"><span class="badge ' + s.cls + '">' + s.emoji + " " + s.label +
+          "</span>" + tk + '<span class="amount">' + esc(dkAmount(t.amount_min, t.amount_max)) + "</span></div>" +
+          '<div class="row2"><span class="who">' + esc(lastName(t.politician) || t.politician) + "</span>" +
+          party + '<span class="chip">' + esc(CHAMBER[t.chamber] || "Ukendt") + "</span></div>" +
+          '<div class="row3"><span>handlet ' + dkDate(t.trade_date) + "</span>" +
+          "<span>indberettet " + dkDate(t.filing_date) + "</span>" + link + "</div>" +
+          "</article>"
+        );
+      })
+      .join("");
+  }
+
+  function wire() {
+    document.getElementById("q").addEventListener("input", function (e) {
+      state.q = e.target.value;
+      render();
+    });
+    var segs = document.querySelectorAll(".seg");
+    segs.forEach(function (b) {
+      b.addEventListener("click", function () {
+        state.side = b.getAttribute("data-side");
+        segs.forEach(function (x) { x.setAttribute("aria-pressed", x === b ? "true" : "false"); });
+        render();
+      });
+    });
+  }
+
+  function load() {
+    fetch("/api/trades")
+      .then(function (r) { if (!r.ok) throw new Error("HTTP " + r.status); return r.json(); })
+      .then(function (d) {
+        ALL = d.trades || [];
+        var when = d.generated_at ? new Date(d.generated_at) : new Date();
+        document.getElementById("meta").textContent =
+          d.count + " handler  ·  opdateret " +
+          when.toLocaleString("da-DK", { day: "2-digit", month: "2-digit", hour: "2-digit", minute: "2-digit" });
+        render();
+      })
+      .catch(function (e) {
+        document.getElementById("status").textContent = "Kunne ikke hente data: " + e.message;
+        document.getElementById("meta").textContent = "fejl";
+      });
+  }
+
+  wire();
+  load();
+</script>
+</body>
+</html>
