@@ -5,6 +5,8 @@ public disclosures, stores them in SQLite, detects newly seen trades on each run
 and emits Danish-language notifications (dry-run by default, optional Slack
 webhook).
 
+**Live web feed:** https://capitol-signal-three.vercel.app (mobile-first, refreshes from Kadoa on each visit)
+
 ## Signal only
 
 This system shows trades. It never places, prepares, or simulates a brokerage
@@ -69,6 +71,19 @@ Secrets live only in `.env`, which is git-ignored. Commit `.env.example` only.
 
 Green circle = KØB (buy), red = SALG (sell), 🔁 = BYT (exchange). Chamber labels
 are Hus, Senat, OGE. Amounts use the Danish thousands separator.
+
+## Web feed (Vercel)
+
+A read-only, mobile-first feed page is deployed at
+https://capitol-signal-three.vercel.app. It is served by a Vercel serverless
+function (api/trades.js) that fetches the live Kadoa dataset on each request and
+normalizes it to the same shape as the Python pipeline (buy/sell sides, party,
+chamber, Danish amount and date formatting). Newest first, with search and
+buy/sell filters. Signal only, no execution.
+
+The Python pipeline and the vendored capitol-api service are excluded from the
+deployment via .vercelignore. Deploy config is in vercel.json (framework null,
+static output in public/, serverless functions in api/).
 
 ## Data sources
 
