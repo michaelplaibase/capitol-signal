@@ -1,0 +1,13 @@
+# secrets and local state
+.env
+signal.db
+signal.db-journal
+
+# vendored black-box service (unmodified upstream, not committed)
+vendor/
+node_modules/
+
+# python
+__pycache__/
+*.pyc
+.pytest_cache/
