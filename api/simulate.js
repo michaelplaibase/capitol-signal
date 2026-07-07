@@ -37,7 +37,7 @@ function prettyName(filerObj, id) {
     return filerObj.filer_name || filerObj.name;
   }
   return id
-    .replace(/^(house|senate|exec)_/, "")
+    .replace(/^(house|senate|exec|oge)_/, "")
     .replace(/_/g, " ")
     .replace(/\b\w/g, (c) => c.toUpperCase());
 }

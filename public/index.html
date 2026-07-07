@@ -19,15 +19,15 @@
     -webkit-font-smoothing: antialiased; line-height: 1.4; padding-bottom: env(safe-area-inset-bottom); }
   .wrap { max-width: 640px; margin: 0 auto; }
   header { position: sticky; top: 0; z-index: 10;
-    background: linear-gradient(180deg, var(--bg) 70%, rgba(10,14,20,0.85));
-    backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); padding: 14px 16px 10px; }
+    background: linear-gradient(180deg, var(--bg) 72%, rgba(10,14,20,0.82));
+    backdrop-filter: blur(8px); border-bottom: 1px solid var(--line); padding: 13px 14px 9px; }
   .brand { display: flex; align-items: baseline; gap: 8px; }
   .brand h1 { font-size: 17px; letter-spacing: 0.02em; margin: 0; font-weight: 650; }
   .brand .dot { width: 8px; height: 8px; border-radius: 50%; background: var(--buy);
     box-shadow: 0 0 10px var(--buy); align-self: center; }
   .sub { color: var(--muted); font-size: 12.5px; margin: 2px 0 0; }
   .meta { color: var(--faint); font-size: 11.5px; font-family: var(--mono); margin-top: 6px; }
-  .controls { margin-top: 11px; display: flex; gap: 8px; flex-wrap: wrap; }
+  .controls { margin-top: 10px; display: flex; gap: 7px; flex-wrap: wrap; align-items: center; }
   .search { flex: 1 1 100%; background: var(--bg-soft); border: 1px solid var(--line); color: var(--text);
     border-radius: 10px; padding: 9px 12px; font-size: 14px; font-family: var(--sans); }
   .search::placeholder { color: var(--faint); }
@@ -36,12 +36,19 @@
   .seg { background: var(--bg-soft); border: 1px solid var(--line); color: var(--muted);
     border-radius: 999px; padding: 6px 12px; font-size: 12.5px; cursor: pointer; font-family: var(--sans); }
   .seg[aria-pressed="true"] { color: var(--text); border-color: var(--accent); background: #16233b; }
+  .band { background: var(--bg-soft); border: 1px solid var(--line); color: var(--text);
+    border-radius: 999px; padding: 6px 10px; font-size: 12.5px; font-family: var(--sans); }
   .simbtn { margin-left: auto; background: #16233b; border: 1px solid #2a3d63; color: #cfe0ff;
     border-radius: 999px; padding: 6px 12px; font-size: 12.5px; cursor: pointer; }
+  .chips { display: flex; gap: 6px; overflow-x: auto; margin-top: 9px; padding-bottom: 2px;
+    -webkit-overflow-scrolling: touch; scrollbar-width: none; }
+  .chips::-webkit-scrollbar { display: none; }
+  .chips .lbl { flex: 0 0 auto; color: var(--faint); font-size: 11px; align-self: center; padding-right: 2px; }
+  .chip-p { flex: 0 0 auto; background: var(--bg-soft); border: 1px solid var(--line); color: var(--muted);
+    border-radius: 999px; padding: 6px 12px; font-size: 12.5px; cursor: pointer; white-space: nowrap; }
+  .chip-p:hover, .chip-p.active { border-color: var(--accent); color: var(--text); background: #16233b; }
   main { padding: 8px 12px 40px; }
-  /* Simulator */
-  .sim { background: var(--card); border: 1px solid var(--line); border-radius: 13px;
-    padding: 13px; margin: 8px 0 12px; }
+  .sim { background: var(--card); border: 1px solid var(--line); border-radius: 13px; padding: 13px; margin: 8px 0 12px; }
   .sim h2 { font-size: 14px; margin: 0 0 3px; }
   .sim .hint { color: var(--faint); font-size: 11.5px; margin: 0 0 10px; }
   .sim .fields { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -64,7 +71,6 @@
   .postbl td { padding: 5px 6px; border-top: 1px solid var(--line); font-family: var(--mono); }
   .postbl td.tk { font-weight: 650; }
   .note { color: var(--faint); font-size: 11px; margin-top: 10px; line-height: 1.5; }
-  /* Feed */
   .feed { display: flex; flex-direction: column; gap: 8px; }
   .card { background: var(--card); border: 1px solid var(--line); border-radius: 13px;
     padding: 12px 13px; border-left: 3px solid var(--line); }
@@ -88,13 +94,12 @@
   .chip.D { color: #6ea8ff; border-color: #24406e; } .chip.R { color: #ff8a8a; border-color: #6e2a2a; }
   .row3 { display: flex; align-items: center; gap: 10px; margin-top: 8px; font-size: 11.5px;
     color: var(--faint); font-family: var(--mono); flex-wrap: wrap; }
-  .kurs { background: none; border: 1px dashed var(--line); color: var(--muted); border-radius: 6px;
-    padding: 1px 7px; font-size: 11px; cursor: pointer; font-family: var(--mono); }
-  .kurs:hover { border-color: var(--accent); color: var(--accent); }
-  .kursval { color: var(--muted); }
-  .kursval .up { color: var(--buy); } .kursval .down { color: var(--sell); }
   .row3 a { color: var(--accent); text-decoration: none; margin-left: auto; }
   .row3 a:hover { text-decoration: underline; }
+  .kursline { margin-top: 8px; padding-top: 8px; border-top: 1px solid var(--line);
+    font-family: var(--mono); font-size: 11.5px; color: var(--muted); }
+  .kursline .up { color: var(--buy); } .kursline .down { color: var(--sell); }
+  .kursline .dim { color: var(--faint); }
   .status { text-align: center; color: var(--muted); padding: 34px 16px; font-size: 14px; }
   .spin { display: inline-block; width: 18px; height: 18px; border: 2px solid var(--line);
     border-top-color: var(--accent); border-radius: 50%; animation: sp 0.8s linear infinite; vertical-align: middle; }
@@ -117,8 +122,10 @@
         <button class="seg" data-side="buy" aria-pressed="false">Koeb</button>
         <button class="seg" data-side="sell" aria-pressed="false">Salg</button>
       </div>
+      <select class="band" id="band" aria-label="Filtrer paa beloeb"></select>
       <button class="simbtn" id="simToggle">Simulator</button>
     </div>
+    <div class="chips" id="people"><span class="lbl">Kendte handlende:</span></div>
   </header>
   <main>
     <section class="sim" id="sim" hidden>
@@ -147,7 +154,20 @@
     exchange: { cls: "exchange", emoji: "🔁", label: "BYT" }, other: { cls: "other", emoji: "⚪", label: "ANDET" }
   };
   var CHAMBER = { house: "Hus", senate: "Senat", oge: "OGE" };
-  var priceCache = {};
+  var BANDS = [
+    { key: "all", label: "Alle beloeb" },
+    { key: "b1", lo: 1001, hi: 15000, label: "1k-15k" },
+    { key: "b2", lo: 15001, hi: 50000, label: "15k-50k" },
+    { key: "b3", lo: 50001, hi: 100000, label: "50k-100k" },
+    { key: "b4", lo: 100001, hi: 250000, label: "100k-250k" },
+    { key: "b5", lo: 250001, hi: 500000, label: "250k-500k" },
+    { key: "b6", lo: 500001, hi: 1000000, label: "500k-1M" },
+    { key: "b7", lo: 1000001, hi: 5000000, label: "1-5M" },
+    { key: "b8", lo: 5000001, hi: 25000000, label: "5-25M" },
+    { key: "b9", lo: 25000001, hi: 1e12, label: "25M+" }
+  ];
+  var PEOPLE = ["Pelosi", "Crenshaw", "Tuberville", "Greene", "Gottheimer", "McCaul", "Mullin", "Khanna", "Trump"];
+  var seriesCache = {}, kursObserver = null;
 
   function lastName(full) {
     if (!full) return "";
@@ -162,72 +182,133 @@
   }
   function dkUSD(n) { return group(n) + " USD"; }
   function dkPct(p) { return (p >= 0 ? "+" : "") + String(p).replace(".", ",") + " %"; }
-  function dkDate(iso) {
-    if (!iso) return "?";
-    var p = iso.split("-");
-    return p.length === 3 ? p[2] + "-" + p[1] + "-" + p[0] : iso;
-  }
+  function dkDate(iso) { if (!iso) return "?"; var p = iso.split("-"); return p.length === 3 ? p[2] + "-" + p[1] + "-" + p[0] : iso; }
   function esc(s) {
     return String(s == null ? "" : s).replace(/[&<>"]/g, function (c) {
       return { "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c];
     });
   }
+  function closeOnOrBefore(series, dateStr) {
+    var v = null;
+    for (var i = 0; i < series.length; i++) { if (series[i][0] <= dateStr) v = series[i][1]; else break; }
+    return v;
+  }
 
-  var ALL = [], state = { side: "all", q: "" };
+  var ALL = [], state = { side: "all", q: "", band: "all" };
+
+  function bandById(key) { for (var i = 0; i < BANDS.length; i++) if (BANDS[i].key === key) return BANDS[i]; return BANDS[0]; }
 
   function render() {
     var feed = document.getElementById("feed");
     var q = state.q.trim().toLowerCase();
+    var band = bandById(state.band);
     var rows = ALL.filter(function (t) {
       if (state.side !== "all" && t.side !== state.side) return false;
+      if (band.key !== "all") {
+        var a = t.amount_min;
+        if (a == null || a < band.lo || a > band.hi) return false;
+      }
       if (!q) return true;
       return (t.politician || "").toLowerCase().indexOf(q) >= 0 ||
         (t.ticker || "").toLowerCase().indexOf(q) >= 0 ||
         (t.asset_name || "").toLowerCase().indexOf(q) >= 0;
     });
     document.getElementById("status").textContent = rows.length ? "" : "Ingen handler matcher.";
-    feed.innerHTML = rows.slice(0, 300).map(function (t, i) {
+    feed.innerHTML = rows.slice(0, 300).map(function (t) {
       var s = SIDE[t.side] || SIDE.other;
       var tk = t.ticker ? '<span class="ticker">' + esc(t.ticker) + "</span>"
         : '<span class="ticker none">' + esc(t.asset_name || "uden ticker") + "</span>";
       var party = t.party ? '<span class="chip ' + esc(t.party) + '">' + esc(t.party) +
         (t.state ? "-" + esc(t.state) : "") + "</span>" : "";
+      var link = t.doc_url ? '<a href="' + esc(t.doc_url) + '" target="_blank" rel="noopener">indberetning &#8599;</a>' : "";
       var kurs = t.ticker
-        ? '<button class="kurs" data-tk="' + esc(t.ticker) + '" data-d="' + esc(t.trade_date || "") +
-          '">kurs?</button>'
-        : "";
-      var link = t.doc_url
-        ? '<a href="' + esc(t.doc_url) + '" target="_blank" rel="noopener">indberetning &#8599;</a>' : "";
-      return '<article class="card ' + s.cls + '">' +
+        ? '<div class="kursline"><span class="dim">henter kurs...</span></div>' : "";
+      return '<article class="card ' + s.cls + '" data-tk="' + esc(t.ticker || "") + '" data-d="' + esc(t.trade_date || "") + '">' +
         '<div class="row1"><span class="badge ' + s.cls + '">' + s.emoji + " " + s.label + "</span>" +
         tk + '<span class="amount">' + esc(dkAmount(t.amount_min, t.amount_max)) + "</span></div>" +
         '<div class="row2"><button class="who" data-name="' + esc(t.politician || "") + '">' +
         esc(lastName(t.politician) || t.politician) + "</button>" + party +
         '<span class="chip">' + esc(CHAMBER[t.chamber] || "Ukendt") + "</span></div>" +
         '<div class="row3"><span>handlet ' + dkDate(t.trade_date) + "</span>" +
-        "<span>indberettet " + dkDate(t.filing_date) + "</span>" + kurs + link + "</div>" +
+        "<span>indberettet " + dkDate(t.filing_date) + "</span>" + link + "</div>" + kurs +
         "</article>";
     }).join("");
+    hydrateKurs();
   }
 
-  function loadKurs(btn) {
-    var tk = btn.getAttribute("data-tk"), d = btn.getAttribute("data-d");
-    var key = tk + "|" + d;
-    btn.disabled = true; btn.textContent = "...";
-    var show = function (p) {
-      if (!p || p.error || p.close_on_date == null) { btn.textContent = "kurs ukendt"; return; }
-      var cls = p.change_pct >= 0 ? "up" : "down";
-      var span = document.createElement("span");
-      span.className = "kursval";
-      span.innerHTML = "handelsdag $" + p.close_on_date + " &middot; nu $" + p.current_price +
-        ' <span class="' + cls + '">(' + dkPct(p.change_pct) + ")</span>";
-      btn.replaceWith(span);
-    };
-    if (priceCache[key]) { show(priceCache[key]); return; }
-    fetch("/api/price?ticker=" + encodeURIComponent(tk) + "&date=" + encodeURIComponent(d))
+  function fillCard(card) {
+    var line = card.querySelector(".kursline");
+    if (!line || line.dataset.done) return;
+    var tk = card.getAttribute("data-tk"), d = card.getAttribute("data-d");
+    var s = seriesCache[tk];
+    if (!s || s === "loading") return;
+    if (s === "error") { line.innerHTML = '<span class="dim">kurs utilgaengelig</span>'; line.dataset.done = "1"; return; }
+    var px = closeOnOrBefore(s.series, d), cur = s.current;
+    if (px == null || cur == null) { line.innerHTML = '<span class="dim">kurs utilgaengelig</span>'; line.dataset.done = "1"; return; }
+    var chg = Number(((100 * (cur - px)) / px).toFixed(1)), cls = chg >= 0 ? "up" : "down";
+    line.innerHTML = "handelsdag $" + px.toFixed(2) + ' <span class="dim">&middot;</span> nu $' + cur.toFixed(2) +
+      ' <span class="' + cls + '">(' + dkPct(chg) + ")</span>";
+    line.dataset.done = "1";
+  }
+
+  var kQueue = [], kActive = 0;
+  function fillTicker(tk) {
+    document.querySelectorAll(".card[data-tk]").forEach(function (c) {
+      if (c.getAttribute("data-tk") === tk) fillCard(c);
+    });
+  }
+  function fetchSeries(tk, cb) {
+    if (seriesCache[tk]) { if (cb) cb(); return; }
+    seriesCache[tk] = "loading";
+    fetch("/api/series?ticker=" + encodeURIComponent(tk))
       .then(function (r) { return r.json(); })
-      .then(function (p) { priceCache[key] = p; show(p); })
-      .catch(function () { btn.textContent = "kurs fejl"; btn.disabled = false; });
+      .then(function (j) {
+        seriesCache[tk] = (j.error || !j.series) ? "error" : { series: j.series, current: j.current };
+        fillTicker(tk); if (cb) cb();
+      })
+      .catch(function () { seriesCache[tk] = "error"; fillTicker(tk); if (cb) cb(); });
+  }
+  function drain() {
+    while (kActive < 6 && kQueue.length) {
+      var t = kQueue.shift();
+      if (seriesCache[t]) continue;
+      kActive++;
+      fetchSeries(t, function () { kActive--; drain(); });
+    }
+  }
+  function enqueue(tickers) {
+    tickers.forEach(function (t) { if (t && !seriesCache[t] && kQueue.indexOf(t) < 0) kQueue.push(t); });
+    drain();
+  }
+
+  function hydrateKurs() {
+    var cards = [].slice.call(document.querySelectorAll(".card[data-tk]")).filter(function (c) { return c.getAttribute("data-tk"); });
+    cards.forEach(function (c) { var s = seriesCache[c.getAttribute("data-tk")]; if (s && s !== "loading") fillCard(c); });
+    // Eager-load the unique tickers of the first cards so the visible feed always
+    // shows a price, even where IntersectionObserver does not fire.
+    var eager = [], seen = {};
+    for (var i = 0; i < cards.length && eager.length < 25; i++) {
+      var tk = cards[i].getAttribute("data-tk");
+      if (!seen[tk]) { seen[tk] = 1; if (!seriesCache[tk]) eager.push(tk); }
+    }
+    enqueue(eager);
+    // Lazy-load the rest as they scroll into view.
+    if (kursObserver) kursObserver.disconnect();
+    if ("IntersectionObserver" in window) {
+      kursObserver = new IntersectionObserver(function (entries) {
+        entries.forEach(function (e) {
+          if (!e.isIntersecting) return;
+          var tk = e.target.getAttribute("data-tk");
+          kursObserver.unobserve(e.target);
+          if (tk && !seriesCache[tk]) enqueue([tk]);
+          else fillCard(e.target);
+        });
+      }, { rootMargin: "500px" });
+      cards.forEach(function (c) {
+        var line = c.querySelector(".kursline");
+        if (line && !line.dataset.done) kursObserver.observe(c);
+      });
+    }
   }
 
   function runSim() {
@@ -247,8 +328,8 @@
         var rows = (d.positions || []).filter(function (p) { return !p.error; }).map(function (p) {
           var u = p.return_pct >= 0;
           return "<tr><td class='tk'>" + esc(p.ticker) + "</td><td>" + group(p.invested) +
-            "</td><td>" + group(p.current_value) + "</td><td class='pct " + (u ? "up" : "down") +
-            "'>" + dkPct(p.return_pct) + "</td></tr>";
+            "</td><td>" + group(p.current_value) + "</td><td class='pct " + (u ? "up" : "down") + "'>" +
+            dkPct(p.return_pct) + "</td></tr>";
         }).join("");
         out.innerHTML =
           '<div class="bignum"><span class="val">' + dkUSD(t.current_value) + "</span>" +
@@ -256,10 +337,27 @@
           '<div class="flow">' + esc(d.matched.filer_name) + " &middot; siden " + esc(d.since) +
           " &middot; investeret (est.) " + dkUSD(t.invested) + "</div>" +
           '<table class="postbl"><thead><tr><th>Ticker</th><th>Investeret</th><th>Vaerd nu</th><th>Afkast</th></tr></thead><tbody>' +
-          rows + "</tbody></table>" +
-          '<p class="note">' + esc(d.note) + "</p>";
+          rows + "</tbody></table><p class=\"note\">" + esc(d.note) + "</p>";
       })
       .catch(function (e) { go.disabled = false; out.innerHTML = '<p class="note">Fejl: ' + esc(e.message) + "</p>"; });
+  }
+
+  function openSimFor(name) {
+    var sim = document.getElementById("sim");
+    sim.hidden = false;
+    document.getElementById("simName").value = name;
+    runSim();
+  }
+
+  function buildChrome() {
+    var band = document.getElementById("band");
+    band.innerHTML = BANDS.map(function (b) { return '<option value="' + b.key + '">' + b.label + "</option>"; }).join("");
+    var people = document.getElementById("people");
+    PEOPLE.forEach(function (name) {
+      var b = document.createElement("button");
+      b.className = "chip-p"; b.textContent = name; b.setAttribute("data-q", name);
+      people.appendChild(b);
+    });
   }
 
   function wire() {
@@ -272,25 +370,28 @@
         render();
       });
     });
+    document.getElementById("band").addEventListener("change", function (e) { state.band = e.target.value; render(); });
     document.getElementById("feed").addEventListener("click", function (e) {
-      var k = e.target.closest(".kurs");
-      if (k) { loadKurs(k); return; }
       var w = e.target.closest(".who");
       if (w) {
         var name = w.getAttribute("data-name");
-        document.getElementById("q").value = name;
-        state.q = name; render();
+        document.getElementById("q").value = name; state.q = name; render();
         window.scrollTo({ top: 0, behavior: "smooth" });
       }
+    });
+    document.getElementById("people").addEventListener("click", function (e) {
+      var c = e.target.closest(".chip-p");
+      if (!c) return;
+      var name = c.getAttribute("data-q");
+      document.querySelectorAll(".chip-p").forEach(function (x) { x.classList.toggle("active", x === c); });
+      document.getElementById("q").value = name; state.q = name; render();
+      openSimFor(name);
+      window.scrollTo({ top: 0, behavior: "smooth" });
     });
     var sim = document.getElementById("sim");
     document.getElementById("simToggle").addEventListener("click", function () {
       sim.hidden = !sim.hidden;
-      if (!sim.hidden) {
-        var n = document.getElementById("simName");
-        if (!n.value) n.value = state.q.trim() || "Pelosi";
-        n.focus();
-      }
+      if (!sim.hidden) { var n = document.getElementById("simName"); if (!n.value) n.value = state.q.trim() || "Pelosi"; n.focus(); }
     });
     document.getElementById("simGo").addEventListener("click", runSim);
     document.getElementById("simName").addEventListener("keydown", function (e) { if (e.key === "Enter") runSim(); });
@@ -312,7 +413,7 @@
       });
   }
 
-  wire(); load();
+  buildChrome(); wire(); load();
 </script>
 </body>
 </html>
