@@ -144,7 +144,8 @@
   <footer>
     <strong>Kun signal.</strong> Viser indberettede handler, ikke realtid. Under STOCK Act kan
     politikere indberette uger efter handlen. Ingen ordre placeres nogensinde.<br />
-    Kurser og simulator er estimater (lukkekurs paa handelsdagen, Yahoo Finance). Ikke investeringsraadgivning.<br />
+    Kurser er estimater: gns. af dagens hoej og lav paa handelsdagen mod seneste kurs (Yahoo Finance).
+    Overskud og underskud gaelder koeb. Simulator bruger lukkekurs. Ikke investeringsraadgivning.<br />
     Kilde: Kadoa (offentlige indberettelser), Repraesentanternes Hus + Senat + OGE.
   </footer>
 </div>
@@ -193,6 +194,15 @@
     for (var i = 0; i < series.length; i++) { if (series[i][0] <= dateStr) v = series[i][1]; else break; }
     return v;
   }
+  // Day-average price (high/low midpoint) on or before a date, close as fallback.
+  function avgOnOrBefore(series, dateStr) {
+    var v = null;
+    for (var i = 0; i < series.length; i++) {
+      if (series[i][0] <= dateStr) v = series[i][2] != null ? series[i][2] : series[i][1];
+      else break;
+    }
+    return v;
+  }
 
   var ALL = [], state = { side: "all", q: "", band: "all" };
 
@@ -222,8 +232,9 @@
         (t.state ? "-" + esc(t.state) : "") + "</span>" : "";
       var link = t.doc_url ? '<a href="' + esc(t.doc_url) + '" target="_blank" rel="noopener">indberetning &#8599;</a>' : "";
       var kurs = t.ticker
-        ? '<div class="kursline"><span class="dim">henter kurs...</span></div>' : "";
-      return '<article class="card ' + s.cls + '" data-tk="' + esc(t.ticker || "") + '" data-d="' + esc(t.trade_date || "") + '">' +
+        ? '<div class="kursline"><span class="dim">henter kurs...</span></div>'
+        : '<div class="kursline"><span class="dim">uden ticker &middot; kurs ikke tilgaengelig</span></div>';
+      return '<article class="card ' + s.cls + '" data-tk="' + esc(t.ticker || "") + '" data-d="' + esc(t.trade_date || "") + '" data-side="' + esc(t.side || "other") + '">' +
         '<div class="row1"><span class="badge ' + s.cls + '">' + s.emoji + " " + s.label + "</span>" +
         tk + '<span class="amount">' + esc(dkAmount(t.amount_min, t.amount_max)) + "</span></div>" +
         '<div class="row2"><button class="who" data-name="' + esc(t.politician || "") + '">' +
@@ -240,14 +251,20 @@
     var line = card.querySelector(".kursline");
     if (!line || line.dataset.done) return;
     var tk = card.getAttribute("data-tk"), d = card.getAttribute("data-d");
+    var side = card.getAttribute("data-side") || "other";
     var s = seriesCache[tk];
     if (!s || s === "loading") return;
     if (s === "error") { line.innerHTML = '<span class="dim">kurs utilgaengelig</span>'; line.dataset.done = "1"; return; }
-    var px = closeOnOrBefore(s.series, d), cur = s.current;
+    var px = avgOnOrBefore(s.series, d), cur = s.current;
     if (px == null || cur == null) { line.innerHTML = '<span class="dim">kurs utilgaengelig</span>'; line.dataset.done = "1"; return; }
     var chg = Number(((100 * (cur - px)) / px).toFixed(1)), cls = chg >= 0 ? "up" : "down";
-    line.innerHTML = "handelsdag $" + px.toFixed(2) + ' <span class="dim">&middot;</span> nu $' + cur.toFixed(2) +
-      ' <span class="' + cls + '">(' + dkPct(chg) + ")</span>";
+    // For a buy, the move from the trade-day price to now reads directly as a
+    // paper profit or loss. For a sell or other, that framing would mislead, so
+    // it is labelled neutrally as the price movement since the trade instead.
+    var verdict = side === "buy" ? (chg >= 0 ? "overskud" : "underskud") : "siden handel";
+    line.innerHTML = "gns. handelsdag $" + px.toFixed(2) +
+      ' <span class="dim">&middot;</span> nu $' + cur.toFixed(2) +
+      ' <span class="' + cls + '">' + dkPct(chg) + " " + verdict + "</span>";
     line.dataset.done = "1";
   }
 

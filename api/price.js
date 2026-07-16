@@ -3,7 +3,7 @@
 // politician traded at, since disclosures give only an amount range) plus the
 // current price. Signal only, read-only market data.
 
-const { yahooDaily, closeOnOrBefore } = require("./_yahoo");
+const { yahooDaily, closeOnOrBefore, avgOnOrBefore } = require("./_yahoo");
 
 module.exports = async (req, res) => {
   const ticker = String((req.query && req.query.ticker) || "").toUpperCase().trim();
@@ -19,16 +19,20 @@ module.exports = async (req, res) => {
     }
     const data = await yahooDaily(ticker, p1, now);
     const onDate = date ? closeOnOrBefore(data.series, date) : null;
+    // Average (high/low midpoint) on the trade date. This is the headline
+    // trade-day estimate the feed shows; close_on_date stays for reference.
+    const avgDate = date ? avgOnOrBefore(data.series, date) : null;
     res.setHeader("Cache-Control", "s-maxage=3600, stale-while-revalidate=86400");
     res.status(200).json({
       ticker,
       currency: data.currency,
       date: date || null,
       close_on_date: onDate != null ? Number(onDate.toFixed(2)) : null,
+      avg_on_date: avgDate != null ? Number(avgDate.toFixed(2)) : null,
       current_price: data.current != null ? Number(data.current.toFixed(2)) : null,
       change_pct:
-        onDate && data.current
-          ? Number(((100 * (data.current - onDate)) / onDate).toFixed(1))
+        avgDate && data.current
+          ? Number(((100 * (data.current - avgDate)) / avgDate).toFixed(1))
           : null,
     });
   } catch (e) {

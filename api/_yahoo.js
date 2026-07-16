@@ -17,12 +17,23 @@ async function yahooDaily(ticker, period1, period2) {
     throw new Error("no data for " + ticker);
   }
   const ts = result.timestamp;
-  const closes = (result.indicators.quote[0] || {}).close || [];
+  const quote = result.indicators.quote[0] || {};
+  const closes = quote.close || [];
+  const highs = quote.high || [];
+  const lows = quote.low || [];
   const meta = result.meta || {};
   const series = [];
   for (let i = 0; i < ts.length; i++) {
     if (closes[i] == null) continue;
-    series.push([new Date(ts[i] * 1000).toISOString().slice(0, 10), closes[i]]);
+    // Third element is the average price for the day: the midpoint of the daily
+    // high and low (the "typical price"). Disclosures give only an amount range
+    // and a date, never an execution price, so this midpoint is the fairest
+    // single estimate of what the politician paid that day. Falls back to the
+    // close when either high or low is missing.
+    const hi = highs[i];
+    const lo = lows[i];
+    const avg = hi != null && lo != null ? (hi + lo) / 2 : closes[i];
+    series.push([new Date(ts[i] * 1000).toISOString().slice(0, 10), closes[i], avg]);
   }
   const current =
     meta.regularMarketPrice != null
@@ -41,4 +52,16 @@ function closeOnOrBefore(series, dateStr) {
   return val;
 }
 
-module.exports = { yahooDaily, closeOnOrBefore };
+// Return the day-average price (high/low midpoint) on the given date, or the
+// most recent trading day before it. Falls back to the close when the average
+// is unavailable for that row.
+function avgOnOrBefore(series, dateStr) {
+  let val = null;
+  for (let i = 0; i < series.length; i++) {
+    if (series[i][0] <= dateStr) val = series[i][2] != null ? series[i][2] : series[i][1];
+    else break;
+  }
+  return val;
+}
+
+module.exports = { yahooDaily, closeOnOrBefore, avgOnOrBefore };

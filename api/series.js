@@ -17,7 +17,14 @@ module.exports = async (req, res) => {
       ticker,
       currency: d.currency,
       current: d.current != null ? Number(d.current.toFixed(2)) : null,
-      series: d.series.map((p) => [p[0], Number(p[1].toFixed(2))]),
+      // Each row is [date, close, avg] where avg is the day high/low midpoint.
+      // The page uses the average to estimate the trade-day price; close stays
+      // for backward compatibility with any close-based consumer.
+      series: d.series.map((p) => [
+        p[0],
+        Number(p[1].toFixed(2)),
+        Number((p[2] != null ? p[2] : p[1]).toFixed(2)),
+      ]),
     });
   } catch (e) {
     res.status(200).json({ ticker, error: String((e && e.message) || e) });
